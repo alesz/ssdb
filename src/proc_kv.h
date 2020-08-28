@@ -34,3 +34,7 @@ DEF_PROC(multi_set);
 DEF_PROC(multi_del);
 DEF_PROC(ttl);
 DEF_PROC(expire);
+DEF_PROC(startsync);
+DEF_PROC(stopsync);
+DEF_PROC(resetsync);
+DEF_PROC(resetcopy);

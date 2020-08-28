@@ -11,10 +11,12 @@ found in the LICENSE file.
 #include "util/log.h"
 #include "util/string_util.h"
 
-BackendSync::BackendSync(SSDBImpl *ssdb, int sync_speed){
+BackendSync::BackendSync(SSDBImpl *ssdb, int sync_speed, bool doResetSync, bool doResetCopy){
 	thread_quit = false;
 	this->ssdb = ssdb;
 	this->sync_speed = sync_speed;
+	this->resetSync = doResetSync;
+	this->resetCopy = doResetCopy;
 }
 
 BackendSync::~BackendSync(){
@@ -212,6 +214,16 @@ void BackendSync::Client::init(){
 		}
 	}
 	
+	if (this->backend->resetSync) {
+		log_info("BackendSync::Client::init requested resetSync=true, ignoring received last_seq and setting last_seq=0");
+		last_seq = 0;
+	}
+
+	if (this->backend->resetCopy) {
+		log_info("BackendSync::Client::init requested resetCopy=true, ignoring received last_key and setting last_key=''");
+		last_key = "";
+	}
+
 	SSDBImpl *ssdb = (SSDBImpl *)backend->ssdb;
 	BinlogQueue *logs = ssdb->binlogs;
 	if(last_seq != 0 && (last_seq > logs->max_seq() || last_seq < logs->min_seq())){

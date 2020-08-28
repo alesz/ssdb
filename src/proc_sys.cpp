@@ -270,3 +270,31 @@ int proc_clear_binlog(NetworkServer *net, Link *link, const Request &req, Respon
 	resp->push_back("ok");
 	return 0;
 }
+
+int proc_startsync(NetworkServer *net, Link *link, const Request &req, Response *resp) {
+	SSDBServer *serv = (SSDBServer *)net->data;
+	serv->startsync();
+	resp->push_back("ok");
+	return 0;
+}
+
+int proc_stopsync(NetworkServer *net, Link *link, const Request &req, Response *resp) {
+	SSDBServer *serv = (SSDBServer *)net->data;
+	serv->stopsync();
+	resp->push_back("ok");
+	return 0;
+}
+
+int proc_resetcopy(NetworkServer *net, Link *link, const Request &req, Response *resp) {
+	SSDBServer *serv = (SSDBServer *)net->data;
+	serv->resetcopy();
+	resp->push_back("ok");
+	return 0;
+}
+
+int proc_resetsync(NetworkServer *net, Link *link, const Request &req, Response *resp) {
+	SSDBServer *serv = (SSDBServer *)net->data;
+	serv->resetsync();
+	resp->push_back("ok");
+	return 0;
+}

@@ -17,9 +17,9 @@ found in the LICENSE file.
 #include "util/thread.h"
 
 class BackendSync{
-private:
 	struct Client;
-private:
+	bool resetSync;
+	bool resetCopy;
 	std::vector<Client *> clients;
 	std::vector<Client *> clients_tmp;
 
@@ -34,10 +34,10 @@ private:
 	SSDBImpl *ssdb;
 	int sync_speed;
 public:
-	BackendSync(SSDBImpl *ssdb, int sync_speed);
+	BackendSync(SSDBImpl *ssdb, int sync_speed, bool doResetSync = false, bool doResetCopy = false);
 	~BackendSync();
 	void proc(const Link *link);
-	
+
 	std::vector<std::string> stats();
 };
 

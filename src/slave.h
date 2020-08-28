@@ -15,7 +15,6 @@ found in the LICENSE file.
 #include "net/link.h"
 
 class Slave{
-private:
 	uint64_t copy_count;
 	uint64_t sync_count;
 		
@@ -40,7 +39,6 @@ private:
 
 	std::string status_key();
 	void load_status();
-	void save_status();
 
 	volatile bool thread_quit;
 	pthread_t run_thread_tid;
@@ -71,6 +69,8 @@ public:
 		
 	void set_id(const std::string &id);
 	std::string stats() const;
+
+	void save_status();
 };
 
 #endif
