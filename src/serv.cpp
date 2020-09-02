@@ -299,6 +299,7 @@ void SSDBServer::stopsync(){
 }
 
 void SSDBServer::startsync(){
+	stopsync();
 	int sync_speed = this->conf->get_num("replication.sync_speed");
 	backend_sync = new BackendSync(this->ssdb, sync_speed);
 	log_info("startsync created new backend_sync");
@@ -351,19 +352,7 @@ void SSDBServer::startsync(){
 }
 
 void SSDBServer::resetsync(){
-	log_info("resetsync called");
-	std::vector<Slave *>::iterator it;
-	for(it = slaves.begin(); it != slaves.end(); it++){
-		Slave *slave = *it;
-		slave->last_seq = 0;
-		slave->last_key = "";
-		slave->save_status();
-		slave->stop();
-		delete slave;
-	}
-	slaves.clear();
-	log_info("resetsync cleared slaves!2");
-	delete backend_sync;
+	stopsync();
 
 	log_info("resetsync deleted backend_sync");
 	int sync_speed = this->conf->get_num("replication.sync_speed");
@@ -419,18 +408,7 @@ void SSDBServer::resetsync(){
 
 void SSDBServer::resetcopy(){
 	log_info("resetcopy called");
-	std::vector<Slave *>::iterator it;
-	for(it = slaves.begin(); it != slaves.end(); it++){
-		Slave *slave = *it;
-		slave->last_seq = 0;
-		slave->last_key = "";
-		slave->save_status();
-		slave->stop();
-		delete slave;
-	}
-	slaves.clear();
-	log_info("resetcopy cleared slaves");
-	delete backend_sync;
+	stopsync();
 
 	log_info("resetcopy deleted backend_sync");
 	int sync_speed = this->conf->get_num("replication.sync_speed");
